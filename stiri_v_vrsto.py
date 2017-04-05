@@ -56,15 +56,14 @@ class Gui():
 
     def plosca_klik(self, event):
         stolpec = (event.x - Gui.ODMIK) // Gui.VELIKOST_POLJA
-        vrstica = (event.y - Gui.ODMIK) // Gui.VELIKOST_POLJA
         sredisce_stolpec = stolpec * Gui.VELIKOST_POLJA + Gui.VELIKOST_POLJA // 2 + Gui.ODMIK
-        #spremeniti vrstico
-        sredisce_vrstica = vrstica * Gui.VELIKOST_POLJA + Gui.VELIKOST_POLJA // 2 + Gui.ODMIK
         barva = 'yellow' if self.igra.na_potezi == RUMENI_IGRALEC else 'red'
-        self.plosca.create_oval(sredisce_stolpec - Gui.POLMER_KROGCA, sredisce_vrstica - Gui.POLMER_KROGCA, sredisce_stolpec + Gui.POLMER_KROGCA, sredisce_vrstica + Gui.POLMER_KROGCA, fill = barva)
+        vrstica = self.igra.naredi_potezo(stolpec)
+        if vrstica != None:
+            sredisce_vrstica = vrstica * Gui.VELIKOST_POLJA + Gui.VELIKOST_POLJA // 2 + Gui.ODMIK
+            self.plosca.create_oval(sredisce_stolpec - Gui.POLMER_KROGCA, sredisce_vrstica - Gui.POLMER_KROGCA, sredisce_stolpec + Gui.POLMER_KROGCA, sredisce_vrstica + Gui.POLMER_KROGCA, fill = barva)
 
     #def povleci_potezo():
-
 
 if __name__ == "__main__":
     root = Tk()
