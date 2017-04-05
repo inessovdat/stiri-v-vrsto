@@ -15,12 +15,15 @@ class Gui():
     def __init__(self, master):
         master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno(master))
 
-        self.plosca = Canvas(master, width= 7 * Gui.VELIKOST_POLJA + Gui.ODMIK, height= 6 * Gui.VELIKOST_POLJA + Gui.ODMIK)
+        self.plosca = Canvas(master, width = 7 * Gui.VELIKOST_POLJA + Gui.ODMIK, height = 6 * Gui.VELIKOST_POLJA + Gui.ODMIK, bg = 'dark turquoise')
         self.plosca.pack()
         self.narisi_crte()
         self.plosca.bind("<Button-1>", self.plosca_klik)
 
         self.igra = Igra()
+        for i in range(7):
+            for j in range(6):
+                self.plosca.create_oval(2 * Gui.ODMIK + i * Gui.VELIKOST_POLJA,2 * Gui.ODMIK + j * Gui.VELIKOST_POLJA, (i+1) * Gui.VELIKOST_POLJA, (j+1) * Gui.VELIKOST_POLJA, fill = 'black')
 
         # Glavni menu
         menu = Menu(master)
@@ -57,7 +60,7 @@ class Gui():
     def plosca_klik(self, event):
         stolpec = (event.x - Gui.ODMIK) // Gui.VELIKOST_POLJA
         sredisce_stolpec = stolpec * Gui.VELIKOST_POLJA + Gui.VELIKOST_POLJA // 2 + Gui.ODMIK
-        barva = 'yellow' if self.igra.na_potezi == RUMENI_IGRALEC else 'red'
+        barva = 'gold' if self.igra.na_potezi == RUMENI_IGRALEC else 'tomato'
         vrstica = self.igra.naredi_potezo(stolpec)
         if vrstica != None:
             sredisce_vrstica = vrstica * Gui.VELIKOST_POLJA + Gui.VELIKOST_POLJA // 2 + Gui.ODMIK
@@ -70,3 +73,4 @@ if __name__ == "__main__":
     root.title("Stiri v vrsto")
     aplikacija = Gui(root)
     root.mainloop()
+
