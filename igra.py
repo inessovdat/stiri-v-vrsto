@@ -1,6 +1,7 @@
 RDECI_IGRALEC = 'RD'
 RUMENI_IGRALEC = 'RU'
 PRAZNO = ""
+NI_KONEC = "ni konec igre"
 
 def nasprotnik(igralec):
     '''Vrne nasprotnika od igralca.'''
@@ -41,7 +42,19 @@ class Igra():
                 mozne_poteze.append(i)
         return mozne_poteze
 
-    def naredi_potezo(self, p):
+    def vrni_vrstico(self, p):
+        if p not in self.veljavne_poteze():
+            return None
+        elif self.na_potezi == None:
+            return None
+        else:
+            a = 5
+            while a >= 0 and self.plosca[a][p] != PRAZNO:
+                a -= 1
+            self.zamenjaj_igralca()
+            return a
+
+    def shrani_poteze(self, p):
         if p not in self.veljavne_poteze():
             return None
         elif self.na_potezi == None:
@@ -54,25 +67,33 @@ class Igra():
             self.plosca[a][p] = self.na_potezi
             print(self.plosca)
             self.zamenjaj_igralca()
-            return a
+            (zmagovalec, stirka) = self.preveri_konec_igre()
+            if zmagovalec == NI_KONEC:
+                # Igre ni konec, zdaj je na potezi nasprotnik
+                self.na_potezi = nasprotnik(self.na_potezi)
+            else:
+                # Igre je konec
+                self.na_potezi = None
+            return (zmagovalec, stirka)
+
 
     stirke =[
         #vrstice
-            [((i,0), (i,1), (i,2), (i,3)) for i in range(6)] +
-            [((i,1), (i,2), (i,3), (i,4)) for i in range(6)] +
-            [((i,2), (i,3), (i,4), (i,5)) for i in range(6)] +
-            [((i,3), (i,4), (i,5), (i,6)) for i in range(6)] +
+            [((i,0), (i,1), (i,2), (i,3)) for i in range(6)],
+            [((i,1), (i,2), (i,3), (i,4)) for i in range(6)],
+            [((i,2), (i,3), (i,4), (i,5)) for i in range(6)],
+            [((i,3), (i,4), (i,5), (i,6)) for i in range(6)],
         #stolpci
-            [((0,j), (1,j), (2,j), (3,j)) for j in range(7)] +
-            [((1,j), (2,j), (3,j), (4,j)) for j in range(7)] +
-            [((2,j), (3,j), (4,j), (5,j)) for j in range(7)] +
+            [((0,j), (1,j), (2,j), (3,j)) for j in range(7)],
+            [((1,j), (2,j), (3,j), (4,j)) for j in range(7)],
+            [((2,j), (3,j), (4,j), (5,j)) for j in range(7)],
         #diagonale /
-            [((0,j), (1,j-1), (2,j-2),(3,j-3))for j in range(3,7)] +
-            [((1,j), (2,j-1), (3,j-2),(4,j-3))for j in range(3,7)] +
-            [((2,j), (3,j-1), (4,j-2),(5,j-3))for j in range(3,7)] +
+            [((0,j), (1,j-1), (2,j-2),(3,j-3))for j in range(3,7)],
+            [((1,j), (2,j-1), (3,j-2),(4,j-3))for j in range(3,7)],
+            [((2,j), (3,j-1), (4,j-2),(5,j-3))for j in range(3,7)],
         #diagonale \
-            [((0,j), (1,j+1), (2,j+2),(3,j+3))for j in range(4)] +
-            [((1,j), (2,j+1), (3,j+2),(4,j+3))for j in range(4)] +
+            [((0,j), (1,j+1), (2,j+2),(3,j+3))for j in range(4)],
+            [((1,j), (2,j+1), (3,j+2),(4,j+3))for j in range(4)],
             [((2,j), (3,j+1), (4,j+2),(5,j+3))for j in range(4)]]
 
 
@@ -84,12 +105,13 @@ class Igra():
            (NI_KONEC, None), če igre še ni konec'''
 
         for stirka in Igra.stirke:
-            ((i1,j1),(i2,j2),(i3,j3), (i4,j4)) = stirka
-            p = self.plosca[i1][j1]
-            print (p)
-            if p != PRAZNO and p == self.plosca[i2][j2] == self.plosca[i3][j3] == self.plosca[i4][j4]:
+            for j in stirka:
+                ((i1,j1),(i2,j2),(i3,j3),(i4,j4)) = j
+                p = self.plosca[i1][j1]
+                if p != PRAZNO and p == self.plosca[i2][j2] == self.plosca[i3][j3] == self.plosca[i4][j4]:
                 # zmagovalna štirka
-                return (p, [stirka[0], stirka[1], stirka[2], stirka[3]])
+                    print((p, [j[0], j[1], j[2], j[3]]))
+                    return (p, [j[0], j[1], j[2], j[3]])
         # Ni zmagovalca, ali je igre konec?
         for i in range(7):
             if self.plosca[0][i] is PRAZNO:
