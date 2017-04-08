@@ -56,8 +56,7 @@ class Igra():
             self.zamenjaj_igralca()
             return a
 
-    def preveri_konec_igre(self):
-        stirke =[
+    stirke =[
         #vrstice
             [((i,0), (i,1), (i,2), (i,3)) for i in range(6)] +
             [((i,1), (i,2), (i,3), (i,4)) for i in range(6)] +
@@ -75,3 +74,26 @@ class Igra():
             [((0,j), (1,j+1), (2,j+2),(3,j+3))for j in range(4)] +
             [((1,j), (2,j+1), (3,j+2),(4,j+3))for j in range(4)] +
             [((2,j), (3,j+1), (4,j+2),(5,j+3))for j in range(4)]]
+
+
+
+    def preveri_konec_igre(self):
+        '''(RDECI_IGRALEC, stirka) če je igre konec in je zmagal RDECI_IGRALEC z dano zmagovalno štirko.
+           (RUMENI_IGRALEC, stirka) če je igre konec in je zmagal RUMENI_IGRALEC z dano zmagovalno štirko.
+           (NEODLOCENO, None), če je igre konec in je neodločeno.
+           (NI_KONEC, None), če igre še ni konec'''
+
+        for stirka in Igra.stirke:
+            ((i1,j1),(i2,j2),(i3,j3), (i4,j4)) = stirka
+            p = self.plosca[i1][j1]
+            print (p)
+            if p != PRAZNO and p == self.plosca[i2][j2] == self.plosca[i3][j3] == self.plosca[i4][j4]:
+                # zmagovalna štirka
+                return (p, [stirka[0], stirka[1], stirka[2], stirka[3]])
+        # Ni zmagovalca, ali je igre konec?
+        for i in range(7):
+            if self.plosca[0][i] is PRAZNO:
+                # Našli smo prazno plosca, igre ni konec
+                return (NI_KONEC, None)
+        # Vsa polja so polna, rezultat je neodločen
+        return (NEODLOCENO, None)
