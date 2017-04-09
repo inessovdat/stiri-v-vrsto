@@ -2,6 +2,7 @@ RDECI_IGRALEC = 'RD'
 RUMENI_IGRALEC = 'RU'
 PRAZNO = ""
 NI_KONEC = "ni konec igre"
+NEODLOCENO = "neodločeno"
 
 def nasprotnik(igralec):
     '''Vrne nasprotnika od igralca.'''
