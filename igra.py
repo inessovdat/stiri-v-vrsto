@@ -20,9 +20,6 @@ class Igra():
         self.plosca = [[PRAZNO for i in range(7)] for j in range(6)]
         self.zgodovina = []
 
-    def zamenjaj_igralca(self):
-        self.na_potezi = nasprotnik(self.na_potezi)
-
     def shrani_pozicijo(self):
         pozicija = [self.plosca[i][:] for i in range(6)]
         self.zgodovina.append((pozicija, self.na_potezi))
@@ -33,8 +30,8 @@ class Igra():
         kopirano.na_potezi = self.na_potezi
         return kopirano
 
-    #def razveljavi(self):
-        #(self.plosca, self.na_potezi) = self.zgodovina.pop()
+    def razveljavi(self):
+        (self.plosca, self.na_potezi) = self.zgodovina.pop()
 
     def veljavne_poteze(self):
         mozne_poteze = []
@@ -52,7 +49,6 @@ class Igra():
             a = 5
             while a >= 0 and self.plosca[a][p] != PRAZNO:
                 a -= 1
-            self.zamenjaj_igralca()
             return a
 
     def shrani_poteze(self, p):
@@ -66,8 +62,6 @@ class Igra():
             while a >= 0 and self.plosca[a][p] != PRAZNO:
                 a -= 1
             self.plosca[a][p] = self.na_potezi
-            print(self.plosca)
-            self.zamenjaj_igralca()
             (zmagovalec, stirka) = self.preveri_konec_igre()
             if zmagovalec == NI_KONEC:
                 # Igre ni konec, zdaj je na potezi nasprotnik
