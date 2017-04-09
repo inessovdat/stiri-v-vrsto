@@ -92,14 +92,14 @@ class Gui():
         for i in range(7):
            for j in range(6):
                self.plosca.create_oval(2 * Gui.ODMIK + i * Gui.VELIKOST_POLJA, 2 * Gui.ODMIK + j * Gui.VELIKOST_POLJA,
-                                       (i+1) * Gui.VELIKOST_POLJA, (j+1) * Gui.VELIKOST_POLJA, fill = 'black')
+                                       (i+1) * Gui.VELIKOST_POLJA, (j+1) * Gui.VELIKOST_POLJA, fill = 'black', tag = Gui.TAG_OKVIR)
 
     def narisi_krogec(self, p, barva):
         '''Na ustrezno mesto nariše krogec ustrezne barve.'''
         (stolpec, sredisce_stolpec, vrstica) = p
         sredisce_vrstica = vrstica * Gui.VELIKOST_POLJA + Gui.VELIKOST_POLJA // 2 + Gui.ODMIK
         self.plosca.create_oval(sredisce_stolpec - Gui.POLMER_KROGCA, sredisce_vrstica - Gui.POLMER_KROGCA,
-                                        sredisce_stolpec + Gui.POLMER_KROGCA, sredisce_vrstica + Gui.POLMER_KROGCA, fill = barva)
+                                        sredisce_stolpec + Gui.POLMER_KROGCA, sredisce_vrstica + Gui.POLMER_KROGCA, fill = barva, tag = Gui.TAG_FIGURA)
 
     def narisi_zmagovalne_stiri(self, zmagovalec, stirka):
         '''S temnejšo barvo obarva in obrobi zmagovalno štirko.'''
@@ -109,21 +109,26 @@ class Gui():
             y = vrstica * Gui.VELIKOST_POLJA
             x = stolpec * Gui.VELIKOST_POLJA
             z = Gui.ODMIK
-            self.plosca.create_oval(x + z, y + z, x + Gui.VELIKOST_POLJA + z, y + Gui.VELIKOST_POLJA + z, width = 2 * Gui.ODMIK, fill = barva)
+            self.plosca.create_oval(x + z, y + z, x + Gui.VELIKOST_POLJA + z, y + Gui.VELIKOST_POLJA + z, width = 2 * Gui.ODMIK, fill = barva, tag = Gui.TAG_FIGURA)
 
     def plosca_klik(self, event):
-        ''' Izvede se ob kliku na igralno ploščo. '''
+        '''Izvede se ob kliku na ploščo. '''
         stolpec = (event.x - Gui.ODMIK) // Gui.VELIKOST_POLJA
         sredisce_stolpec = stolpec * Gui.VELIKOST_POLJA + Gui.VELIKOST_POLJA // 2 + Gui.ODMIK
         vrstica = self.igra.vrni_vrstico(stolpec)
-        self.povleci_potezo((stolpec, sredisce_stolpec, vrstica))
+        if 0<= stolpec <=6 and 0 <= vrstica <= 5:
+            if self.igra.na_potezi == RDECI_IGRALEC or self.igra.na_potezi == RUMENI_IGRALEC:
+                self.povleci_potezo((stolpec, sredisce_stolpec, vrstica))
+            else:
+                pass
+        else:logging.debug("klik izven plosce")
 
     def povleci_potezo(self, p):
         (stolpec, sredisce_stolpec,vrstica) = p
         igralec = self.igra.na_potezi
         r = self.igra.shrani_poteze(stolpec)
         (zmagovalec, stirka) = r
-        if r is None:
+        if r == None:
             # Neveljavna poteza, nič se ne spremeni
             pass
         else:
