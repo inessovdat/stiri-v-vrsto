@@ -116,19 +116,17 @@ class Gui():
         stolpec = (event.x - Gui.ODMIK) // Gui.VELIKOST_POLJA
         sredisce_stolpec = stolpec * Gui.VELIKOST_POLJA + Gui.VELIKOST_POLJA // 2 + Gui.ODMIK
         vrstica = self.igra.vrni_vrstico(stolpec)
-        if 0<= stolpec <=6 and 0 <= vrstica <= 5:
-            if self.igra.na_potezi == RDECI_IGRALEC or self.igra.na_potezi == RUMENI_IGRALEC:
-                self.povleci_potezo((stolpec, sredisce_stolpec, vrstica))
-            else:
-                pass
-        else:logging.debug("klik izven plosce")
+        if self.igra.na_potezi == RDECI_IGRALEC or self.igra.na_potezi == RUMENI_IGRALEC:
+            self.povleci_potezo((stolpec, sredisce_stolpec, vrstica))
+        else:
+            pass
 
     def povleci_potezo(self, p):
         (stolpec, sredisce_stolpec,vrstica) = p
         igralec = self.igra.na_potezi
         r = self.igra.shrani_poteze(stolpec)
         (zmagovalec, stirka) = r
-        if r == None:
+        if r is None:
             # Neveljavna poteza, nič se ne spremeni
             pass
         else:
