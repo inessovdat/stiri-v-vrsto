@@ -9,7 +9,7 @@ class Gui():
 
     TAG_OKVIR = 'okvir'
 
-    VELIKOST_POLJA = 70
+    VELIKOST_POLJA = 100
 
     # Odmik od roba polja
     ODMIK = 2
@@ -125,7 +125,6 @@ class Gui():
         (stolpec, sredisce_stolpec,vrstica) = p
         igralec = self.igra.na_potezi
         r = self.igra.shrani_poteze(stolpec)
-        (zmagovalec, stirka) = r
         if r is None:
             # Neveljavna poteza, nič se ne spremeni
             pass
@@ -136,8 +135,9 @@ class Gui():
                 if igralec == RDECI_IGRALEC:
                     self.narisi_krogec(p, 'tomato')
                 else:
-                    self.narisi_krogec(p, 'gold')
+                    self.narisi_krogec(p, 'gold1')
                 # Igre še ni konec
+                (zmagovalec, stirka) = r
                 if zmagovalec == NI_KONEC:
                     # Izvede se naslednja poteza in zamenja napis
                     if self.igra.na_potezi == RDECI_IGRALEC:
@@ -151,10 +151,10 @@ class Gui():
                     self.koncaj_igro(zmagovalec, stirka)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Igrica stiri v vrsto")
+    parser = argparse.ArgumentParser(description="Igrica štiri v vrsto")
     parser.add_argument('--debug',
                         action='store_true',
-                        help='vklopi sporoÄila o dogajanju')
+                        help='vklopi sporočila o dogajanju')
     args = parser.parse_args()
     if args.debug:
         logging.basicConfig(level=logging.DEBUG)

@@ -1,7 +1,7 @@
 RDECI_IGRALEC = 'RD'
 RUMENI_IGRALEC = 'RU'
 PRAZNO = ""
-NI_KONEC = "ni konec igre"
+NI_KONEC = "igre ni konec"
 NEODLOCENO = "neodločeno"
 
 def nasprotnik(igralec):
@@ -52,9 +52,9 @@ class Igra():
             return a
 
     def shrani_poteze(self, p):
-        if p not in self.veljavne_poteze():
+        if (p not in self.veljavne_poteze()) or (self.na_potezi == None):
             return None
-        elif self.na_potezi == None:
+        elif self.plosca[0][p] != PRAZNO:
             return None
         else:
             self.shrani_pozicijo()
@@ -105,9 +105,8 @@ class Igra():
                 p = self.plosca[i1][j1]
                 if p != PRAZNO and p == self.plosca[i2][j2] == self.plosca[i3][j3] == self.plosca[i4][j4]:
                 # zmagovalna štirka
-                    print((p, [j[0], j[1], j[2], j[3]]))
                     return (p, [j[0], j[1], j[2], j[3]])
-        # Ni zmagovalca, ali je igre konec?
+        # Ni zmagovalca, preverimo ali je konec igre
         for i in range(7):
             if self.plosca[0][i] is PRAZNO:
                 # Našli smo prazno plosca, igre ni konec
