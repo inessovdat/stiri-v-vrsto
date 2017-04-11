@@ -43,7 +43,7 @@ class Igra():
     def vrni_vrstico(self, p):
         if p in self.veljavne_poteze():
             a = 5
-            while a >= 0 and self.plosca[a][p] != PRAZNO:
+            while self.plosca[a][p] != PRAZNO:
                 a -= 1
             return a
         else:
@@ -56,10 +56,7 @@ class Igra():
             return None
         else:
             self.shrani_pozicijo()
-            a = 5
-            while a >= 0 and self.plosca[a][p] != PRAZNO:
-                a -= 1
-            self.plosca[a][p] = self.na_potezi
+            self.plosca[self.vrni_vrstico(p)][p] = self.na_potezi
             (zmagovalec, stirka) = self.preveri_konec_igre()
             if zmagovalec == NI_KONEC:
                 # Igre ni konec, zdaj je na potezi nasprotnik

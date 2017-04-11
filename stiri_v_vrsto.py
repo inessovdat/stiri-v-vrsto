@@ -97,10 +97,9 @@ class Gui():
                self.plosca.create_oval(2 * Gui.ODMIK + i * Gui.VELIKOST_POLJA, 2 * Gui.ODMIK + j * Gui.VELIKOST_POLJA,
                                        (i+1) * Gui.VELIKOST_POLJA, (j+1) * Gui.VELIKOST_POLJA, fill = 'black', tag = Gui.TAG_OKVIR)
 
-    def narisi_krogec(self, p, barva):
+    def narisi_krogec(self, stolpec, vrstica, barva):
         '''Na ustrezno mesto nariše krogec ustrezne barve.'''
-        (stolpec, vrstica) = p
-        self.plosca.create_oval(stolpec * Gui.VELIKOST_POLJA + 2 * Gui.ODMIK, vrstica * Gui.VELIKOST_POLJA + 2 * Gui.ODMIK,
+        self.plosca.create_oval(stolpec * Gui.VELIKOST_POLJA + 2 * Gui.ODMIK, (vrstica) * Gui.VELIKOST_POLJA + 2 * Gui.ODMIK,
                                 (stolpec + 1)* Gui.VELIKOST_POLJA, (vrstica + 1) * Gui.VELIKOST_POLJA, fill = barva, tag = Gui.TAG_FIGURA)
 
     def narisi_zmagovalne_stiri(self, zmagovalec, stirka):
@@ -116,21 +115,20 @@ class Gui():
     def plosca_klik(self, event):
         '''Izvede se ob kliku na ploščo. '''
         stolpec = (event.x - Gui.ODMIK) // Gui.VELIKOST_POLJA
-        vrstica = self.igra.vrni_vrstico(stolpec)
-        if vrstica != None:
-            if 0<=vrstica<=5 and 0<=stolpec<=6:
-                if self.igra.na_potezi == RDECI_IGRALEC or self.igra.na_potezi == RUMENI_IGRALEC:
-                    self.povleci_potezo((stolpec, vrstica))
-                else:
-                    # Nihče ni na potezi, ne naredimo nič
-                    pass
+        #if vrstica != None:
+           # if 0<=vrstica<=5 and 0<=stolpec<=6:
+        if self.igra.na_potezi == RDECI_IGRALEC or self.igra.na_potezi == RUMENI_IGRALEC:
+            self.povleci_potezo(stolpec)
         else:
-            # Neveljavna poteza
+            # Nihče ni na potezi, ne naredimo nič
             pass
+        #else:
+            # Neveljavna poteza
+          #  pass
 
-    def povleci_potezo(self, p):
-        (stolpec, vrstica) = p
+    def povleci_potezo(self, stolpec):
         igralec = self.igra.na_potezi
+        vrstica = self.igra.vrni_vrstico(stolpec)
         r = self.igra.shrani_poteze(stolpec)
         if r is None:
             # Neveljavna poteza, nič se ne spremeni
@@ -140,9 +138,9 @@ class Gui():
             if vrstica != None:
                 # Na zaslon narišemo krogec ustrezne barve
                 if igralec == RDECI_IGRALEC:
-                    self.narisi_krogec(p, 'brown1')
+                    self.narisi_krogec(stolpec, vrstica, 'brown1')
                 else:
-                    self.narisi_krogec(p, 'Darkgoldenrod1')
+                    self.narisi_krogec(stolpec, vrstica, 'Darkgoldenrod1')
                 # Igre še ni konec
                 (zmagovalec, stirka) = r
                 if zmagovalec == NI_KONEC:
