@@ -103,7 +103,7 @@ class Minimax:
                         self.igra.razveljavi()
                         if vrednost > vrednost_najboljse:
                             vrednost_najboljse = vrednost
-                            najboljsa_poteza = (p, 0)
+                            najboljsa_poteza = (p)
                 else:
                     # Minimiziramo
                     najboljsa_poteza = None
