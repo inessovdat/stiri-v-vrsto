@@ -41,15 +41,13 @@ class Igra():
         return mozne_poteze
 
     def vrni_vrstico(self, p):
-        if p not in self.veljavne_poteze():
-            return None
-        elif self.na_potezi == None:
-            return None
-        else:
+        if p in self.veljavne_poteze():
             a = 5
             while a >= 0 and self.plosca[a][p] != PRAZNO:
                 a -= 1
             return a
+        else:
+            pass
 
     def shrani_poteze(self, p):
         if (p not in self.veljavne_poteze()) or (self.na_potezi == None):
