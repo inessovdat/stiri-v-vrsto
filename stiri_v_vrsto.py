@@ -25,13 +25,13 @@ class Gui():
         master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno(master))
 
         # Igralna plošča
-        self.plosca = Canvas(master, width = 7 * Gui.VELIKOST_POLJA + Gui.ODMIK, height = 6 * Gui.VELIKOST_POLJA + 2 * Gui.ODMIK, bg = 'blue')
+        self.plosca = Canvas(master, width = 7 * Gui.VELIKOST_POLJA + 4 * Gui.ODMIK, height = 6 * Gui.VELIKOST_POLJA + 4 * Gui.ODMIK, bg = 'blue')
         self.plosca.grid(row=1, column=0)
         self.plosca.bind("<Button-1>", self.plosca_klik)
         self.narisi_igralno_plosco()
 
         # Napis ob začetku igre
-        self.napis = StringVar(master, value="Dobrodošli v 4 v vrsto!")#zakaj ne dela
+        self.napis = StringVar(master, value = "Dobrodošli v 4 v vrsto!")#zakaj ne dela
         Label(master, textvariable = self.napis).grid(row=0, column=0)
 
         # Glavni menu
@@ -41,7 +41,6 @@ class Gui():
         # Podmenu
         menu_igra = Menu(menu, tearoff = 0)
         menu.add_cascade(label="Igra", menu=menu_igra)
-        #menu_igra.add_command(label = "Nova igra", command = self.zacni_igro)
         menu_igra.add_command(label="Rdeči=Človek, Rumeni=Človek",
                               command=lambda: self.zacni_igro(Clovek(self), Clovek(self)))
         menu_igra.add_command(label="Rdeči=Človek, Rumeni=Računalnik",
@@ -58,7 +57,7 @@ class Gui():
         # Ustavimo vsa vlakna, ki trenutno razmišljajo
         self.prekini_igralce()
         self.plosca.delete(Gui.TAG_FIGURA)
-         # Ustvarimo novo igro
+        # Ustvarimo novo igro
         self.igra = Igra()
         # Nastavimo igralce
         self.rdeci_igralec = rdeci_igralec
@@ -119,18 +118,14 @@ class Gui():
     def plosca_klik(self, event):
         '''Izvede se ob kliku na ploščo. '''
         stolpec = (event.x - Gui.ODMIK) // Gui.VELIKOST_POLJA
-        #if vrstica != None:
-           # if 0<=vrstica<=5 and 0<=stolpec<=6:
         if self.igra.na_potezi == RDECI_IGRALEC or self.igra.na_potezi == RUMENI_IGRALEC:
             self.povleci_potezo(stolpec)
         else:
             # Nihče ni na potezi, ne naredimo nič
             pass
-        #else:
-            # Neveljavna poteza
-          #  pass
 
     def povleci_potezo(self, stolpec):
+        '''Spremeni napis trenutnega igralca in nariše krogec.'''
         igralec = self.igra.na_potezi
         vrstica = self.igra.vrni_vrstico(stolpec)
         r = self.igra.shrani_poteze(stolpec)
