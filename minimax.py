@@ -62,16 +62,15 @@ class Minimax:
             (0,1) : -Minimax.ZMAGA//1000000
         }
         vrednost = 0
-        for t in self.igra.stirke:
-            for p in t:
-                x = 0
-                y = 0
-                for (i,j) in p:
-                    if self.igra.plosca[i][j] == self.jaz:
-                        x += 1
-                    elif self.igra.plosca[i][j] == nasprotnik(self.jaz):
-                        y += 1
-                vrednost += vrednost_stirke.get((x,y), 0)
+        for p in self.igra.stirke:
+            x = 0
+            y = 0
+            for (i,j) in p:
+                if self.igra.plosca[i][j] == self.jaz:
+                    x += 1
+                elif self.igra.plosca[i][j] == nasprotnik(self.jaz):
+                    y += 1
+            vrednost += vrednost_stirke.get((x,y), 0)
         return vrednost
 
     def minimax(self, globina, maksimiziramo):

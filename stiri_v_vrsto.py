@@ -16,7 +16,7 @@ class Gui():
 
     # Odmik od roba polja
     ODMIK = 2
-    
+
     def __init__(self, master, globina):
         self.rdeci_igralec = None
         self.rumeni_igralec = None
@@ -50,7 +50,9 @@ class Gui():
         menu_igra.add_command(label="Rdeči=Računalnik, Rumeni=Računalnik",
                               command=lambda: self.zacni_igro(Racunalnik(self, Minimax(globina)), Racunalnik(self, Minimax(globina))))
 
-        self.zacni_igro(Clovek(self), Racunalnik(self, Minimax(globina)))
+        self.plosca.after(1000,
+                          lambda:
+                          self.zacni_igro(Clovek(self), Racunalnik(self, Minimax(globina))))
 
     def zacni_igro(self, rdeci_igralec, rumeni_igralec):
         ''' Stanje igre nastavi na začetek.'''
@@ -118,10 +120,15 @@ class Gui():
     def plosca_klik(self, event):
         '''Izvede se ob kliku na ploščo. '''
         stolpec = (event.x - Gui.ODMIK) // Gui.VELIKOST_POLJA
-        if self.igra.na_potezi == RDECI_IGRALEC or self.igra.na_potezi == RUMENI_IGRALEC:
-            self.povleci_potezo(stolpec)
+        if self.igra.na_potezi == RDECI_IGRALEC:
+            logging.debug("plosca_klik: rdeci igralec {0}".format(stolpec))
+            self.rdeci_igralec.klik(stolpec)
+        elif self.igra.na_potezi == RUMENI_IGRALEC:
+            logging.debug("plosca_klik: rdeci igralec {0}".format(stolpec))
+            self.rumeni_igralec.klik(stolpec)
         else:
             # Nihče ni na potezi, ne naredimo nič
+            logging.debug("plosca_klik: ignoriramo klik")
             pass
 
     def povleci_potezo(self, stolpec):

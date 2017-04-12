@@ -1,4 +1,5 @@
 import threading  # za vzporedno izvajanje
+import logging
 
 from minimax import *
 
@@ -56,5 +57,5 @@ class Racunalnik():
 
     def klik(self, p):
         # Računalnik ignorira klike
+        logging.debug("racunalnik.klik: ignoriramo {0}".format(p))
         pass
-
