@@ -2,6 +2,8 @@ import logging
 
 from igra import RDECI_IGRALEC, RUMENI_IGRALEC, PRAZNO, NEODLOCENO, NI_KONEC, nasprotnik
 
+import random
+
 
 ######################################################################
 ## Algoritem minimax
@@ -95,7 +97,7 @@ class Minimax:
                 # Naredimo eno stopnjo minimax
                 if maksimiziramo:
                     # Maksimiziramo
-                    najboljsa_poteza = None
+                    najboljse_poteze = []
                     vrednost_najboljse = -Minimax.NESKONCNO
                     for p in self.igra.veljavne_poteze():
                         self.igra.shrani_poteze(p)
@@ -103,10 +105,12 @@ class Minimax:
                         self.igra.razveljavi()
                         if vrednost > vrednost_najboljse:
                             vrednost_najboljse = vrednost
-                            najboljsa_poteza = (p)
+                            najboljse_poteze = [p]
+                        elif vrednost == vrednost_najboljse:
+                            najboljse_poteze.append(p)
                 else:
                     # Minimiziramo
-                    najboljsa_poteza = None
+                    najboljse_poteze = []
                     vrednost_najboljse = Minimax.NESKONCNO
                     for p in self.igra.veljavne_poteze():
                         self.igra.shrani_poteze(p)
@@ -114,9 +118,11 @@ class Minimax:
                         self.igra.razveljavi()
                         if vrednost < vrednost_najboljse:
                             vrednost_najboljse = vrednost
-                            najboljsa_poteza = (p, 0)
+                            najboljse_poteze = [p]
+                        elif vrednost == vrednost_najboljse:
+                            najboljse_poteze.append(p)
 
-                assert (najboljsa_poteza is not None), "minimax: izračunana poteza je None"
-                return (najboljsa_poteza, vrednost_najboljse)
+                assert (najboljse_poteze is not []), "minimax: izračunana poteza je None"
+                return (random.choice(najboljse_poteze), vrednost_najboljse)
         else:
             assert False, "minimax: nedefinirano stanje igre"
