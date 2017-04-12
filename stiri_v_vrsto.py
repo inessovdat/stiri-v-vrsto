@@ -5,7 +5,7 @@ from racunalnik import *
 import argparse
 import logging
 
-MINIMAX_GLOBINA = 3
+MINIMAX_GLOBINA = 4
 
 class Gui():
     TAG_FIGURA = 'figura'
@@ -25,7 +25,7 @@ class Gui():
         master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno(master))
 
         # Igralna plošča
-        self.plosca = Canvas(master, width = 7 * Gui.VELIKOST_POLJA + Gui.ODMIK, height = 6 * Gui.VELIKOST_POLJA + 2 * Gui.ODMIK, bg = 'blue')#barva roba
+        self.plosca = Canvas(master, width = 7 * Gui.VELIKOST_POLJA + Gui.ODMIK, height = 6 * Gui.VELIKOST_POLJA + 2 * Gui.ODMIK, bg = 'blue')
         self.plosca.grid(row=1, column=0)
         self.plosca.bind("<Button-1>", self.plosca_klik)
         self.narisi_igralno_plosco()
@@ -94,23 +94,27 @@ class Gui():
         ''' Nariše igralno ploščo.'''
         for i in range(7):
            for j in range(6):
-               self.plosca.create_oval(2 * Gui.ODMIK + i * Gui.VELIKOST_POLJA, 2 * Gui.ODMIK + j * Gui.VELIKOST_POLJA,
-                                       (i+1) * Gui.VELIKOST_POLJA, (j+1) * Gui.VELIKOST_POLJA, fill = 'black', tag = Gui.TAG_OKVIR)
+               odmik = Gui.ODMIK
+               polje = Gui.VELIKOST_POLJA
+               self.plosca.create_oval(5 * odmik + i * polje, 5 * odmik + j * polje, (i+1) * polje, (j+1) * polje, fill = 'black', tag = Gui.TAG_OKVIR)
 
     def narisi_krogec(self, stolpec, vrstica, barva):
         '''Na ustrezno mesto nariše krogec ustrezne barve.'''
-        self.plosca.create_oval(stolpec * Gui.VELIKOST_POLJA + 2 * Gui.ODMIK, (vrstica) * Gui.VELIKOST_POLJA + 2 * Gui.ODMIK,
-                                (stolpec + 1)* Gui.VELIKOST_POLJA, (vrstica + 1) * Gui.VELIKOST_POLJA, fill = barva, tag = Gui.TAG_FIGURA)
+        odmik = Gui.ODMIK
+        polje = Gui.VELIKOST_POLJA
+        self.plosca.create_oval(stolpec * polje + 5 * odmik, (vrstica) * polje + 5 * odmik,
+                                (stolpec + 1) * polje , (vrstica + 1) * polje, fill = barva, tag = Gui.TAG_FIGURA)
 
     def narisi_zmagovalne_stiri(self, zmagovalec, stirka):
         '''S temnejšo barvo obarva in obrobi zmagovalno štirko.'''
         barva = 'red' if zmagovalec == RDECI_IGRALEC else 'yellow'
         for p in stirka:
             (vrstica, stolpec) = p
-            y = vrstica * Gui.VELIKOST_POLJA
-            x = stolpec * Gui.VELIKOST_POLJA
-            z = Gui.ODMIK
-            self.plosca.create_oval(x + z, y + z, x + Gui.VELIKOST_POLJA + z, y + Gui.VELIKOST_POLJA + z, width = 2 * Gui.ODMIK, fill = barva, tag = Gui.TAG_FIGURA)
+            odmik = Gui.ODMIK
+            polje = Gui.VELIKOST_POLJA
+            y = vrstica * polje
+            x = stolpec * polje
+            self.plosca.create_oval(x + 5 * odmik, y + 5 * odmik, x + polje, y + polje, width = 2 * odmik, fill = barva, outline = 'white', tag = Gui.TAG_FIGURA)
 
     def plosca_klik(self, event):
         '''Izvede se ob kliku na ploščo. '''
