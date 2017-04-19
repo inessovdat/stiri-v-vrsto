@@ -86,7 +86,7 @@ class Igra():
             [((1,j), (2,j+1), (3,j+2),(4,j+3))for j in range(4)],
             [((2,j), (3,j+1), (4,j+2),(5,j+3))for j in range(4)]]
 
-
+    stirke = [s for l in stirke for s in l]
 
     def preveri_konec_igre(self):
         '''(RDECI_IGRALEC, stirka) če je igre konec in je zmagal RDECI_IGRALEC z dano zmagovalno štirko.
@@ -94,13 +94,12 @@ class Igra():
            (NEODLOCENO, None), če je igre konec in je neodločeno.
            (NI_KONEC, None), če igre še ni konec'''
 
-        for stirka in Igra.stirke:
-            for j in stirka:
-                ((i1,j1),(i2,j2),(i3,j3),(i4,j4)) = j
-                p = self.plosca[i1][j1]
-                if p != PRAZNO and p == self.plosca[i2][j2] == self.plosca[i3][j3] == self.plosca[i4][j4]:
-                # zmagovalna štirka
-                    return (p, [j[0], j[1], j[2], j[3]])
+        for j in Igra.stirke:
+            ((i1,j1),(i2,j2),(i3,j3),(i4,j4)) = j
+            p = self.plosca[i1][j1]
+            if p != PRAZNO and p == self.plosca[i2][j2] == self.plosca[i3][j3] == self.plosca[i4][j4]:
+            # zmagovalna štirka
+                return (p, [j[0], j[1], j[2], j[3]])
         # Ni zmagovalca, preverimo ali je konec igre
         for i in range(7):
             if self.plosca[0][i] is PRAZNO:
