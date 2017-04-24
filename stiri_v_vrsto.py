@@ -22,6 +22,13 @@ class Gui():
         self.rumeni_igralec = None
         self.igra = None
 
+        # Za animacijo
+        self.anim_id = None # ID krogca, ki pada, None, ce ne animiramo
+        self.anim_stolpec = None
+        self.anim_vrstica = None # ko je to celo število, pomeni, da animiramo in da je krogec v tej vrstici
+        self.anim_koncna = None # vrstica, do katere mora priti padajoci krogec
+        self.anim_stanje = None # Sem spravimo podatek o tem, kaj se mora zgoditi, ko je animacije konec
+
         master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno(master))
 
         # Igralna plošča
@@ -91,6 +98,7 @@ class Gui():
         self.prekini_igralce()
         master.destroy()
 
+
     def narisi_igralno_plosco(self):
         ''' Nariše igralno ploščo.'''
         for i in range(7):
@@ -98,13 +106,6 @@ class Gui():
                odmik = Gui.ODMIK
                polje = Gui.VELIKOST_POLJA
                self.plosca.create_oval(5 * odmik + i * polje, 5 * odmik + j * polje, (i+1) * polje, (j+1) * polje, fill = 'black', tag = Gui.TAG_OKVIR)
-
-    def narisi_krogec(self, stolpec, vrstica, barva):
-        '''Na ustrezno mesto nariše krogec ustrezne barve.'''
-        odmik = Gui.ODMIK
-        polje = Gui.VELIKOST_POLJA
-        self.plosca.create_oval(stolpec * polje + 5 * odmik, (vrstica) * polje + 5 * odmik,
-                                (stolpec + 1) * polje , (vrstica + 1) * polje, fill = barva, tag = Gui.TAG_FIGURA)
 
     def narisi_zmagovalne_stiri(self, zmagovalec, stirka):
         '''S temnejšo barvo obarva in obrobi zmagovalno štirko.'''
@@ -134,33 +135,53 @@ class Gui():
     def povleci_potezo(self, stolpec):
         '''Spremeni napis trenutnega igralca in nariše krogec.'''
         igralec = self.igra.na_potezi
-        vrstica = self.igra.vrni_vrstico(stolpec)
-        r = self.igra.shrani_poteze(stolpec)
-        if r is None:
+        self.anim_stanje = self.igra.shrani_poteze(stolpec)
+        if self.anim_stanje is None:
             # Neveljavna poteza, nič se ne spremeni
             pass
         else:
             # Veljavna poteza znotraj igralne plošče
-            if vrstica != None:
-                # Na zaslon narišemo krogec ustrezne barve
-                if igralec == RDECI_IGRALEC:
-                    self.narisi_krogec(stolpec, vrstica, 'brown1')
-                else:
-                    self.narisi_krogec(stolpec, vrstica, 'Darkgoldenrod1')
-                # Igre še ni konec
-                (zmagovalec, stirka) = r
-                if zmagovalec == NI_KONEC:
-                    # Izvede se naslednja poteza in zamenja napis
-                    if self.igra.na_potezi == RDECI_IGRALEC:
-                        self.napis.set('Na potezi je rdeči igralec.')
-                        self.rdeci_igralec.igraj()
-                    elif self.igra.na_potezi == RUMENI_IGRALEC:
-                        self.napis.set('Na potezi je rumeni igralec.')
-                        self.rumeni_igralec.igraj()
-                else:
-                    # Igre je konec
-                    self.koncaj_igro(zmagovalec, stirka)
+            self.anim_stolpec = stolpec
+            self.anim_vrstica = 0
+            self.anim_koncna = self.igra.vrni_vrstico(stolpec)
+            odmik = Gui.ODMIK
+            polje = Gui.VELIKOST_POLJA
+            barva = ('brown1' if igralec == RDECI_IGRALEC else 'Darkgoldenrod1')
+            self.anim_id = self.plosca.create_oval(self.anim_stolpec * polje + 5 * odmik,
+                                                       (self.anim_vrstica) * polje + 5 * odmik,
+                                                       (self.anim_stolpec + 1) * polje ,
+                                                       (self.anim_vrstica + 1) * polje,
+                                                       fill = barva, tag = Gui.TAG_FIGURA)
+            self.plosca.after(200, self.spusti_krogec)
 
+    def spusti_krogec(self):
+        if self.anim_vrstica <= self.anim_koncna:
+            # padamo
+            self.anim_vrstica += 1
+            odmik = Gui.ODMIK
+            polje = Gui.VELIKOST_POLJA
+            self.plosca.coords(self.anim_id,
+                              self.anim_stolpec * polje + 5 * odmik,
+                                                       (self.anim_vrstica) * polje + 5 * odmik,
+                                                       (self.anim_stolpec + 1) * polje ,
+                                                       (self.anim_vrstica + 1) * polje)
+            self.plosca.after(200, self.spusti_krogec)
+        else:
+            # smo prisli do konca
+            (zmagovalec, stirka) = self.anim_stanje
+            if zmagovalec == NI_KONEC:
+                # Izvede se naslednja poteza in zamenja napis
+                if self.igra.na_potezi == RDECI_IGRALEC:
+                    self.napis.set('Na potezi je rdeči igralec.')
+                    self.rdeci_igralec.igraj()
+                elif self.igra.na_potezi == RUMENI_IGRALEC:
+                    self.napis.set('Na potezi je rumeni igralec.')
+                    self.rumeni_igralec.igraj()
+            else:
+                # Igre je konec
+                self.koncaj_igro(zmagovalec, stirka)
+
+ 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Igrica štiri v vrsto")
     parser.add_argument('--globina',
