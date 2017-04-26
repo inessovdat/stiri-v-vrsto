@@ -4,7 +4,6 @@ from igra import RDECI_IGRALEC, RUMENI_IGRALEC, PRAZNO, NEODLOCENO, NI_KONEC, na
 
 import random
 
-
 ######################################################################
 ## Algoritem minimax
 
@@ -62,13 +61,13 @@ class Minimax:
         # Trojke, ki se ne pojavljajo v slovarju, so vredne 0.
         vrednost_stirke = {
             (4,0) : Minimax.ZMAGA - 10*self.stej(),
-            (0,4) : -Minimax.ZMAGA,
+            (0,4) : -Minimax.ZMAGA + 10*self.stej(),
             (3,0) : Minimax.ZMAGA//100 - 10*self.stej(),
-            (0,3) : -Minimax.ZMAGA//100,
+            (0,3) : -Minimax.ZMAGA//100 + 10*self.stej(),
             (2,0) : Minimax.ZMAGA//10000 - 10*self.stej(),
-            (0,2) : -Minimax.ZMAGA//10000,
+            (0,2) : -Minimax.ZMAGA//10000 + 10*self.stej(),
             (1,0) : Minimax.ZMAGA//1000000 - 10*self.stej(),
-            (0,1) : -Minimax.ZMAGA//1000000
+            (0,1) : -Minimax.ZMAGA//1000000 + 10*self.stej()
         }
         vrednost = 0
         for p in self.igra.stirke:
@@ -107,28 +106,28 @@ class Minimax:
                     # Maksimiziramo
                     najboljse_poteze = []
                     vrednost_najboljse = -Minimax.NESKONCNO
-                    for p in self.igra.veljavne_poteze():
-                        self.igra.shrani_poteze(p)
+                    for stolpec in self.igra.veljavne_poteze():
+                        self.igra.povleci_potezo(stolpec)
                         vrednost = self.minimax(globina-1, not maksimiziramo)[1]
                         self.igra.razveljavi()
                         if vrednost > vrednost_najboljse:
                             vrednost_najboljse = vrednost
-                            najboljse_poteze = [p]
+                            najboljse_poteze = [stolpec]
                         elif vrednost == vrednost_najboljse:
-                            najboljse_poteze.append(p)
+                            najboljse_poteze.append(stolpec)
                 else:
                     # Minimiziramo
                     najboljse_poteze = []
                     vrednost_najboljse = Minimax.NESKONCNO
-                    for p in self.igra.veljavne_poteze():
-                        self.igra.shrani_poteze(p)
+                    for stolpec in self.igra.veljavne_poteze():
+                        self.igra.povleci_potezo(stolpec)
                         vrednost = self.minimax(globina-1, not maksimiziramo)[1]
                         self.igra.razveljavi()
                         if vrednost < vrednost_najboljse:
                             vrednost_najboljse = vrednost
-                            najboljse_poteze = [p]
+                            najboljse_poteze = [stolpec]
                         elif vrednost == vrednost_najboljse:
-                            najboljse_poteze.append(p)
+                            najboljse_poteze.append(stolpec)
 
                 assert (najboljse_poteze is not []), "minimax: izračunana poteza je None"
                 return (random.choice(najboljse_poteze), vrednost_najboljse)
