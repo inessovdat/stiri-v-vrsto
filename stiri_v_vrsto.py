@@ -5,7 +5,7 @@ from racunalnik import *
 import argparse
 import logging
 
-MINIMAX_GLOBINA = 4
+ALFABETA_GLOBINA = 4
 
 class Gui():
     TAG_FIGURA = 'figura'
@@ -53,16 +53,16 @@ class Gui():
         menu_igra.add_command(label="Človek : Človek",
                               command=lambda: self.zacni_igro(Clovek(self), Clovek(self)))
         menu_igra.add_command(label="Rdeči=Človek : Rumeni=Računalnik",
-                              command=lambda: self.zacni_igro(Clovek(self), Racunalnik(self, Minimax(globina))))
+                              command=lambda: self.zacni_igro(Clovek(self), Racunalnik(self, AlfaBeta(globina))))
         menu_igra.add_command(label="Rdeči=Računalnik : Rumeni=Človek",
-                              command=lambda: self.zacni_igro(Racunalnik(self, Minimax(globina)), Clovek(self)))
+                              command=lambda: self.zacni_igro(Racunalnik(self, AlfaBeta(globina)), Clovek(self)))
         menu_igra.add_command(label="Računalnik : Računalnik",
-                              command=lambda: self.zacni_igro(Racunalnik(self, Minimax(globina)), Racunalnik(self, Minimax(globina))))
+                              command=lambda: self.zacni_igro(Racunalnik(self, AlfaBeta(globina)), Racunalnik(self, AlfaBeta(globina))))
         
         # Z zamikom začne igro človek(rdeči) proti računalniku(rumeni)
         self.plosca.after(1000,
                           lambda:
-                          self.zacni_igro(Clovek(self), Racunalnik(self, Minimax(globina))))
+                          self.zacni_igro(Clovek(self), Racunalnik(self, AlfaBeta(globina))))
 
     def zacni_igro(self, rdeci_igralec, rumeni_igralec):
         '''Stanje igre nastavi na začetek.'''
@@ -208,9 +208,9 @@ def koordinate_krogca(vrstica, stolpec):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Igrica štiri v vrsto")
     parser.add_argument('--globina',
-                        default=MINIMAX_GLOBINA,
+                        default=ALFABETA_GLOBINA,
                         type=int,
-                        help='globina iskanja za minimax algoritem')
+                        help='globina iskanja za alfabeta algoritem')
     parser.add_argument('--debug',
                         action='store_true',
                         help='vklopi sporočila o dogajanju')
