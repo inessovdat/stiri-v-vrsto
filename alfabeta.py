@@ -7,7 +7,7 @@ import random
 ######################################################################
 ## Algoritem alfabeta
 
-class AlfaBeta:
+class Alfabeta:
     # Algoritem alfabeta predstavimo z objektom, ki hrani stanje igre in
     # algoritma, nima pa dostopa do GUI (ker ga ne sme uporabljati, saj deluje
     # v drugem vlaknu kot tkinter).
@@ -32,7 +32,7 @@ class AlfaBeta:
         self.jaz = self.igra.na_potezi
         self.poteza = None # Sem napišemo potezo, ko jo najdemo
         # Poženemo alfabeta
-        (poteza, vrednost) = self.alfabeta(self.globina, True, -AlfaBeta.NESKONCNO, AlfaBeta.NESKONCNO)
+        (poteza, vrednost) = self.alfabeta(self.globina, True, -Alfabeta.NESKONCNO, Alfabeta.NESKONCNO)
         self.jaz = None
         self.igra = None
         if not self.prekinitev:
@@ -60,14 +60,14 @@ class AlfaBeta:
         # potem je taka trojka za self.jaz vredna v.
         # Trojke, ki se ne pojavljajo v slovarju, so vredne 0.
         vrednost_stirke = {
-            (4,0) : AlfaBeta.ZMAGA - 10*self.stej(),
-            (0,4) : -AlfaBeta.ZMAGA + 10*self.stej(),
-            (3,0) : AlfaBeta.ZMAGA//100 - 10*self.stej(),
-            (0,3) : -AlfaBeta.ZMAGA//100 + 10*self.stej(),
-            (2,0) : AlfaBeta.ZMAGA//10000 - 10*self.stej(),
-            (0,2) : -AlfaBeta.ZMAGA//10000 + 10*self.stej(),
-            (1,0) : AlfaBeta.ZMAGA//1000000 - 10*self.stej(),
-            (0,1) : -AlfaBeta.ZMAGA//1000000 + 10*self.stej()
+            (4,0) : Alfabeta.ZMAGA - 10*self.stej(),
+            (0,4) : -Alfabeta.ZMAGA + 10*self.stej(),
+            (3,0) : Alfabeta.ZMAGA//100 - 10*self.stej(),
+            (0,3) : -Alfabeta.ZMAGA//100 + 10*self.stej(),
+            (2,0) : Alfabeta.ZMAGA//10000 - 10*self.stej(),
+            (0,2) : -Alfabeta.ZMAGA//10000 + 10*self.stej(),
+            (1,0) : Alfabeta.ZMAGA//1000000 - 10*self.stej(),
+            (0,1) : -Alfabeta.ZMAGA//1000000 + 10*self.stej()
         }
         vrednost = 0
         for p in self.igra.stirke:
@@ -91,9 +91,9 @@ class AlfaBeta:
         if zmagovalec in (RDECI_IGRALEC, RUMENI_IGRALEC, NEODLOCENO):
             # Igre je konec, vrnemo njeno vrednost
             if zmagovalec == self.jaz:
-                return (None, AlfaBeta.ZMAGA)
+                return (None, Alfabeta.ZMAGA)
             elif zmagovalec == nasprotnik(self.jaz):
-                return (None, -AlfaBeta.ZMAGA)
+                return (None, -Alfabeta.ZMAGA)
             else:
                 return (None, 0)
         elif zmagovalec == NI_KONEC:
@@ -106,7 +106,7 @@ class AlfaBeta:
                     # Maksimiziramo
                     najboljse_poteze = []
                     poteza = None
-                    vrednost_najboljse = -AlfaBeta.NESKONCNO
+                    vrednost_najboljse = -Alfabeta.NESKONCNO
                     for stolpec in self.igra.veljavne_poteze():
                         self.igra.povleci_potezo(stolpec)
                         vrednost = self.alfabeta(globina-1, not maksimiziramo, alfa, beta)[1]
@@ -116,18 +116,16 @@ class AlfaBeta:
                             najboljse_poteze = [stolpec]
                         elif vrednost == vrednost_najboljse:
                             najboljse_poteze.append(stolpec)
-                            vrednost_najboljse = vrednost
                         alfa = max(alfa, vrednost)
                         if beta < alfa:
                             break
-                    #assert (najboljse_poteze is not []), "alfabeta: izračunana poteza je None"
                     poteza = random.choice(najboljse_poteze)
 
                 else:
                     # Minimiziramo
                     najboljse_poteze = []
                     poteza = None
-                    vrednost_najboljse = AlfaBeta.NESKONCNO
+                    vrednost_najboljse = Alfabeta.NESKONCNO
                     for stolpec in self.igra.veljavne_poteze():
                         self.igra.povleci_potezo(stolpec)
                         vrednost = self.alfabeta(globina-1, not maksimiziramo, alfa, beta)[1]
@@ -137,7 +135,6 @@ class AlfaBeta:
                             najboljse_poteze = [stolpec]
                         elif vrednost == vrednost_najboljse:
                             najboljse_poteze.append(stolpec)
-                            vrednost_najboljse = vrednost
                         beta = min(beta, vrednost)
                         if beta < alfa:
                             break

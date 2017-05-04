@@ -53,16 +53,16 @@ class Gui():
         menu_igra.add_command(label="Človek : Človek",
                               command=lambda: self.zacni_igro(Clovek(self), Clovek(self)))
         menu_igra.add_command(label="Rdeči=Človek : Rumeni=Računalnik",
-                              command=lambda: self.zacni_igro(Clovek(self), Racunalnik(self, AlfaBeta(globina))))
+                              command=lambda: self.zacni_igro(Clovek(self), Racunalnik(self, Alfabeta(globina))))
         menu_igra.add_command(label="Rdeči=Računalnik : Rumeni=Človek",
-                              command=lambda: self.zacni_igro(Racunalnik(self, AlfaBeta(globina)), Clovek(self)))
+                              command=lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina)), Clovek(self)))
         menu_igra.add_command(label="Računalnik : Računalnik",
-                              command=lambda: self.zacni_igro(Racunalnik(self, AlfaBeta(globina)), Racunalnik(self, AlfaBeta(globina))))
+                              command=lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina)), Racunalnik(self, Alfabeta(globina))))
         
         # Z zamikom začne igro človek(rdeči) proti računalniku(rumeni)
         self.plosca.after(1000,
                           lambda:
-                          self.zacni_igro(Clovek(self), Racunalnik(self, AlfaBeta(globina))))
+                          self.zacni_igro(Clovek(self), Racunalnik(self, Alfabeta(globina))))
 
     def zacni_igro(self, rdeci_igralec, rumeni_igralec):
         '''Stanje igre nastavi na začetek.'''
