@@ -5,14 +5,14 @@ from racunalnik import *
 import argparse
 import logging
 
-ALFABETA_GLOBINA = 4
+ALFABETA_GLOBINA = 5
 
 class Gui():
     TAG_FIGURA = 'figura'
 
     TAG_OKVIR = 'okvir'
 
-    VELIKOST_POLJA = 70
+    VELIKOST_POLJA = 80
 
     # Odmik od roba polja
     ODMIK = 2
@@ -31,6 +31,7 @@ class Gui():
         self.animacija_id = None
         self.animacija_zmagovalec = None
 
+        # Če zapremo okno, se pokliče self.zapri_okno
         master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno(master))
 
         # Igralna plošča
@@ -132,7 +133,7 @@ class Gui():
             self.animacija_trenutna_vrstica += 1
             self.plosca.after(150,self.animiraj_krogec)
 
-        # Konca animacijo krogca
+        # Konča animacijo krogca
         else:
             self.plosca.coords(self.animacija_id, koordinate_krogca(vrstica, stolpec))
             # Ponastavi spremenljivke
@@ -175,7 +176,8 @@ class Gui():
             pass
 
     def povleci_potezo(self, stolpec):
-        '''Spremeni napis trenutnega igralca in nariše krogec.'''
+        '''Povleče potezo, če je veljavna, tako da spremeni napis trenutnega igralca in nariše krogec.
+        Če ni veljavna ne naredi nič.'''
         igralec = self.igra.na_potezi
         vrstica = self.igra.vrni_vrstico(stolpec)
         r = self.igra.povleci_potezo(stolpec)
@@ -206,20 +208,30 @@ def koordinate_krogca(vrstica, stolpec):
     return 5 * odmik + stolpec * polje, 5 * odmik + vrstica * polje, (stolpec + 1) * polje, (vrstica + 1) * polje
 
 if __name__ == "__main__":
+    # Opišemo argumente, ki jih sprejmemo iz ukazne vrstice
     parser = argparse.ArgumentParser(description="Igrica štiri v vrsto")
+    # Argument --globina n, s privzeto vrednostjo ALFABETA_GLOBINA
     parser.add_argument('--globina',
                         default=ALFABETA_GLOBINA,
                         type=int,
                         help='globina iskanja za alfabeta algoritem')
+    # Argument --debug, ki vklopi spoorčila o tem, kaj se dogaja
     parser.add_argument('--debug',
                         action='store_true',
                         help='vklopi sporočila o dogajanju')
+
+    # Obdelamo argumente iz ukazne vrstice
     args = parser.parse_args()
+
+    # Vklopimo sporočila, če je uporabnik podal --debug
     if args.debug:
         logging.basicConfig(level=logging.DEBUG)
 
+    # Naredimo glavno okno in nastavimo ime
     root = Tk()
     root.title("Stiri v vrsto")
     aplikacija = Gui(root, args.globina)
+    # Kontrolo prepustimo glavnemu oknu. Funkcija mainloop neha
+    # delovati, ko okno zapremo
     root.mainloop()
 

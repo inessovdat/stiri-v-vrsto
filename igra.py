@@ -21,7 +21,7 @@ class Igra():
         self.zgodovina = []
 
     def shrani_pozicijo(self):
-        '''Igralca, ki je postavil krogec, shrani na mesto kamor ga je postavil.'''
+        '''Igralca, ki je postavil krogec, shrani na mesto, kamor ga je postavil.'''
         pozicija = [self.plosca[i][:] for i in range(6)]
         self.zgodovina.append((pozicija, self.na_potezi))
 
@@ -37,7 +37,7 @@ class Igra():
         (self.plosca, self.na_potezi) = self.zgodovina.pop()
 
     def veljavne_poteze(self):
-        '''Vrne vse možne stolpce v katere lahko postavimo krogec.'''
+        '''Vrne vse možne stolpce, v katere lahko postavimo krogec.'''
         mozne_poteze = []
         for i in range (7):
             if self.plosca[0][i] == PRAZNO:
@@ -45,7 +45,7 @@ class Igra():
         return mozne_poteze
 
     def vrni_vrstico(self, stolpec):
-        '''Vrne vrstico v katero mora pasti krogec.'''
+        '''Vrne vrstico, v katero mora pasti krogec.'''
         if stolpec in self.veljavne_poteze():
             vrstica = 5
             while self.plosca[vrstica][stolpec] != PRAZNO:
@@ -93,8 +93,8 @@ class Igra():
     stirke = [s for l in stirke for s in l]
 
     def preveri_konec_igre(self):
-        '''(RDECI_IGRALEC, stirka) če je igre konec in je zmagal RDECI_IGRALEC z dano zmagovalno štirko.
-           (RUMENI_IGRALEC, stirka) če je igre konec in je zmagal RUMENI_IGRALEC z dano zmagovalno štirko.
+        '''(RDECI_IGRALEC, štirka), če je igre konec in je zmagal RDECI_IGRALEC z dano zmagovalno štirko.
+           (RUMENI_IGRALEC, štirka), če je igre konec in je zmagal RUMENI_IGRALEC z dano zmagovalno štirko.
            (NEODLOCENO, None), če je igre konec in je neodločeno.
            (NI_KONEC, None), če igre še ni konec'''
 
@@ -104,7 +104,7 @@ class Igra():
             if p != PRAZNO and p == self.plosca[i2][j2] == self.plosca[i3][j3] == self.plosca[i4][j4]:
             # zmagovalna štirka
                 return (p, [j[0], j[1], j[2], j[3]])
-        # Ni zmagovalca, preverimo ali je konec igre
+        # Ni zmagovalca, preverimo, ali je konec igre
         for i in range(7):
             if self.plosca[0][i] is PRAZNO:
                 # Našli smo prazno mesto v prvi vrstici, igre ni konec

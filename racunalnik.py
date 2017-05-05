@@ -14,16 +14,6 @@ class Racunalnik():
 
     def igraj(self):
         """Igraj potezo, ki jo vrne algoritem."""
-        # Tu sprožimo vzporedno vlakno, ki računa potezo. Ker tkinter ne deluje,
-        # če vzporedno vlakno direktno uporablja tkinter (glej http://effbot.org/zone/tkinter-threads.htm),
-        # zadeve organiziramo takole:
-        # - poženemo vlakno, ki poišče potezo
-        # - to vlakno nekam zapiše potezo, ki jo je našlo
-        # - glavno vlakno, ki sme uporabljati tkinter, vsakih 100ms pogleda, ali
-        #   je že bila najdena poteza (metoda preveri_potezo spodaj).
-        # Ta rešitev je precej amaterska. Z resno knjižnico za GUI bi zadeve lahko
-        # naredili bolje (vlakno bi samo sporočilo GUI-ju, da je treba narediti potezo).
-
         # Naredimo vlakno, ki mu podamo *kopijo* igre (da ne bo zmedel GUIja):
         self.mislec = threading.Thread(
             target=lambda: self.algoritem.izracunaj_potezo(self.gui.igra.kopija()))

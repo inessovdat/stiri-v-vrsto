@@ -28,7 +28,7 @@ class Minimax:
         """Izračunaj potezo za trenutno stanje dane igre."""
         # To metodo pokličemo iz vzporednega vlakna
         self.igra = igra
-        self.prekinitev = False # Glavno vlakno bo to nastvilo na True, če moramo nehati
+        self.prekinitev = False # Glavno vlakno bo to nastavilo na True, če moramo nehati
         self.jaz = self.igra.na_potezi
         self.poteza = None # Sem napišemo potezo, ko jo najdemo
         # Poženemo minimax
@@ -54,11 +54,11 @@ class Minimax:
                 
 
     def vrednost_pozicije(self):
-        """Ocena vrednosti pozicije: sešteje vrednosti vseh trojk na plošči."""
-        # Slovar, ki pove, koliko so vredne posamezne trojke, kjer "(x,y) : v" pomeni:
-        # če imamo v trojki x znakov igralca in y znakov nasprotnika (in 3-x-y praznih polj),
-        # potem je taka trojka za self.jaz vredna v.
-        # Trojke, ki se ne pojavljajo v slovarju, so vredne 0.
+        """Ocena vrednosti pozicije: sešteje vrednosti vseh štirk na plošči."""
+        # Slovar, ki pove, koliko so vredne posamezne štirke, kjer "(x,y) : v" pomeni:
+        # če imamo v štirki x znakov igralca in y znakov nasprotnika (in 4-x-y praznih polj),
+        # potem je taka štirka za self.jaz vredna v.
+        # Štirke, ki se ne pojavljajo v slovarju, so vredne 0.
         vrednost_stirke = {
             (4,0) : Minimax.ZMAGA - 10*self.stej(),
             (0,4) : -Minimax.ZMAGA + 10*self.stej(),
