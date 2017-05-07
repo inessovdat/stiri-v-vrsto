@@ -5,7 +5,7 @@ from racunalnik import *
 import argparse
 import logging
 
-ALFABETA_GLOBINA = 5
+PRIVZETA_GLOBINA = 5
 
 class Gui():
     TAG_FIGURA = 'figura'
@@ -37,7 +37,7 @@ class Gui():
         # Igralna plošča
         self.plosca = Canvas(master, width = 7 * Gui.VELIKOST_POLJA + 4 * Gui.ODMIK, height = 6 * Gui.VELIKOST_POLJA + 4 * Gui.ODMIK, bg = 'blue')
         self.plosca.grid(row=1, column=0)
-        
+
         self.narisi_igralno_plosco()
 
         # Napis ob začetku igre
@@ -50,16 +50,59 @@ class Gui():
 
         # Podmenu
         menu_igra = Menu(menu, tearoff = 0)
+        podmenu1 = Menu(menu, tearoff=0)
+        podmenu2 = Menu(menu, tearoff=0)
+        podmenu3 = Menu(menu, tearoff=0)
         menu.add_cascade(label="Igra", menu=menu_igra)
-        menu_igra.add_command(label="Človek : Človek",
-                              command=lambda: self.zacni_igro(Clovek(self), Clovek(self)))
-        menu_igra.add_command(label="Rdeči=Človek : Rumeni=Računalnik",
-                              command=lambda: self.zacni_igro(Clovek(self), Racunalnik(self, Alfabeta(globina))))
-        menu_igra.add_command(label="Rdeči=Računalnik : Rumeni=Človek",
-                              command=lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina)), Clovek(self)))
-        menu_igra.add_command(label="Računalnik : Računalnik",
-                              command=lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina)), Racunalnik(self, Alfabeta(globina))))
-        
+        menu_igra.add_command(label="Človek : Človek", command=lambda: self.zacni_igro(Clovek(self), Clovek(self)))
+        menu_igra.add_cascade(label="Človek(rdeči) : Računalnik(rumeni)", menu = podmenu1)
+        menu_igra.add_cascade(label="Računalnik(rdeči) : Človek(rumeni)", menu = podmenu2)
+        menu_igra.add_cascade(label="Računalnik : Računalnik", menu = podmenu3)
+
+        #Podmenu: Težavnost
+        #Težavnost se nastavlja z izbiro algoritma, lazji je minimax , tezji
+        #pa minimax z alpha beta rezi in povecano globino
+
+        # Najlazja igra (računalnik se da zelo lahko premagati)
+        podmenu1.add_command(label='zelo lahko',
+                             command = lambda: self.zacni_igro(Clovek(self), Racunalnik(self, Minimax(globina - 4))))
+        podmenu2.add_command(label='zelo lahko',
+                             command = lambda: self.zacni_igro(Racunalnik(self, Minimax(globina - 4)), Clovek(self)))
+        podmenu3.add_command(label='zelo lahko',
+                             command = lambda: self.zacni_igro(Racunalnik(self, Minimax(globina - 4)), Racunalnik(self, Minimax(globina - 4))))
+
+        # Lahka igra (računalnik se da precej lahko premagati)
+        podmenu1.add_command(label='lahko',
+                             command=lambda: self.zacni_igro(Clovek(self), Racunalnik(self, Minimax(globina - 3))))
+        podmenu2.add_command(label='lahko',
+                             command=lambda: self.zacni_igro(Racunalnik(self, Minimax(globina - 3)), Clovek(self)))
+        podmenu3.add_command(label='lahko',
+                             command=lambda: self.zacni_igro(Racunalnik(self, Minimax(globina - 3)), Racunalnik(self, Minimax(globina - 3))))
+
+        # Srednje težka igra (za zmago se je potrebno malo potruditi)
+        podmenu1.add_command(label='srednje',
+                             command=lambda: self.zacni_igro(Clovek(self), Racunalnik(self, Minimax(globina - 2))))
+        podmenu2.add_command(label='srednje',
+                             command=lambda: self.zacni_igro(Racunalnik(self, Minimax(globina - 2)), Clovek(self)))
+        podmenu3.add_command(label='srednje',
+                             command=lambda: self.zacni_igro(Racunalnik(self, Minimax(globina - 2)), Racunalnik(self, Minimax(globina - 2))))
+
+        # Težka igra (za zmago se je potrebno zelo potruditi)
+        podmenu1.add_command(label='težko',
+                             command=lambda: self.zacni_igro(Clovek(self), Racunalnik(self, Alfabeta(globina - 1))))
+        podmenu2.add_command(label='težko',
+                             command=lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina - 1)), Clovek(self)))
+        podmenu3.add_command(label='težko',
+                             command=lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina - 1)), Racunalnik(self, Alfabeta(globina - 1))))
+
+        # Najtežja igra (računalnik je skoraj nepremagljiv)
+        podmenu1.add_command(label='zelo težko',
+                             command=lambda: self.zacni_igro(Clovek(self), Racunalnik(self, Alfabeta(globina))))
+        podmenu2.add_command(label='zelo težko',
+                             command=lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina)), Clovek(self)))
+        podmenu3.add_command(label='zelo težko',
+                             command=lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina)), Racunalnik(self, Alfabeta(globina))))
+
         # Z zamikom začne igro človek(rdeči) proti računalniku(rumeni)
         self.plosca.after(1000,
                           lambda:
@@ -119,7 +162,7 @@ class Gui():
         self.animacija_stolpec = stolpec
         self.animacija_barva = barva
         self.animacija_id = self.plosca.create_oval(koordinate_krogca(self.animacija_trenutna_vrstica, stolpec), fill = self.animacija_barva, tag = Gui.TAG_FIGURA)
-        
+
         self.animiraj_krogec()
 
     def animiraj_krogec(self):
@@ -212,7 +255,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Igrica štiri v vrsto")
     # Argument --globina n, s privzeto vrednostjo ALFABETA_GLOBINA
     parser.add_argument('--globina',
-                        default=ALFABETA_GLOBINA,
+                        default=PRIVZETA_GLOBINA,
                         type=int,
                         help='globina iskanja za alfabeta algoritem')
     # Argument --debug, ki vklopi spoorčila o tem, kaj se dogaja
@@ -234,4 +277,3 @@ if __name__ == "__main__":
     # Kontrolo prepustimo glavnemu oknu. Funkcija mainloop neha
     # delovati, ko okno zapremo
     root.mainloop()
-

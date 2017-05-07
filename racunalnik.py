@@ -2,6 +2,7 @@ import threading  # za vzporedno izvajanje
 import logging
 
 from alfabeta import *
+from minimax import *
 
 ######################################################################
 ## Igralec računalnik
