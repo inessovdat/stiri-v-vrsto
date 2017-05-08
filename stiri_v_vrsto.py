@@ -24,6 +24,7 @@ class Gui():
 
         # Animacija padanja krogcev
         self.animacija_v_teku = False
+        self.animacija_alarm = None
         self.animacija_trenutna_vrstica = 0
         self.animacija_koncna_vrstica = 0
         self.animacija_stolpec = 0
@@ -113,6 +114,10 @@ class Gui():
         # Ustavimo vsa vlakna, ki trenutno razmišljajo
         self.prekini_igralce()
         self.plosca.delete(Gui.TAG_FIGURA)
+        # Prekličemo animacijo
+        if self.animacija_alarm is not None:
+            self.plosca.after_cancel(self.animacija_alarm)
+            self.animacija_alarm = None
         # Ustvarimo novo igro
         self.igra = Igra()
         # Nastavimo igralce
@@ -174,13 +179,14 @@ class Gui():
         if self.animacija_trenutna_vrstica < vrstica:
             self.plosca.coords(self.animacija_id, koordinate_krogca(self.animacija_trenutna_vrstica, stolpec))
             self.animacija_trenutna_vrstica += 1
-            self.plosca.after(150,self.animiraj_krogec)
+            self.animacija_alarm = self.plosca.after(150,self.animiraj_krogec)
 
         # Konča animacijo krogca
         else:
             self.plosca.coords(self.animacija_id, koordinate_krogca(vrstica, stolpec))
             # Ponastavi spremenljivke
             self.animacija_v_teku = False
+            self.animacija_alarm = None
             self.animacija_trenutna_vrstica = 0
             self.animacija_id = None
             # Preveri, če je konec igre
