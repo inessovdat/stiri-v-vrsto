@@ -8,7 +8,7 @@ import logging
 PRIVZETA_GLOBINA = 5
 
 class Gui():
-    TAG_FIGURA = 'figura'
+    TAG_KROGEC = 'krogec'
 
     TAG_OKVIR = 'okvir'
 
@@ -113,7 +113,7 @@ class Gui():
         '''Stanje igre nastavi na začetek.'''
         # Ustavimo vsa vlakna, ki trenutno razmišljajo
         self.prekini_igralce()
-        self.plosca.delete(Gui.TAG_FIGURA)
+        self.plosca.delete(Gui.TAG_KROGEC)
         # Prekličemo animacijo
         if self.animacija_alarm is not None:
             self.plosca.after_cancel(self.animacija_alarm)
@@ -166,7 +166,7 @@ class Gui():
         self.animacija_koncna_vrstica = vrstica
         self.animacija_stolpec = stolpec
         self.animacija_barva = barva
-        self.animacija_id = self.plosca.create_oval(koordinate_krogca(self.animacija_trenutna_vrstica, stolpec), fill = self.animacija_barva, tag = Gui.TAG_FIGURA)
+        self.animacija_id = self.plosca.create_oval(koordinate_krogca(self.animacija_trenutna_vrstica, stolpec), fill = self.animacija_barva, tag = Gui.TAG_KROGEC)
 
         self.animiraj_krogec()
 
@@ -248,7 +248,7 @@ class Gui():
         barva = 'red' if zmagovalec == RDECI_IGRALEC else 'yellow'
         for p in stirka:
             (vrstica, stolpec) = p
-            self.plosca.create_oval(koordinate_krogca(vrstica, stolpec), width = 2 * Gui.ODMIK, fill = barva, outline = 'white', tag = Gui.TAG_FIGURA)
+            self.plosca.create_oval(koordinate_krogca(vrstica, stolpec), width = 2 * Gui.ODMIK, fill = barva, outline = 'white', tag = Gui.TAG_KROGEC)
 
 def koordinate_krogca(vrstica, stolpec):
     '''Iz vrstice in stolpca izračuna koordinate krogca na plošči.'''
