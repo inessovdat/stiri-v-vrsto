@@ -34,10 +34,7 @@ class Igra():
 
     def razveljavi(self):
         '''Razveljavi potezo.'''
-        if self.na_potezi != None:
-            (self.plosca, self.na_potezi) = self.zgodovina.pop()
-        else:
-            pass
+        (self.plosca, self.na_potezi) = self.zgodovina.pop()
 
     def veljavne_poteze(self):
         '''Vrne vse možne stolpce, v katere lahko postavimo krogec.'''
