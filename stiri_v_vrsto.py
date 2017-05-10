@@ -49,7 +49,7 @@ class Gui():
         menu = Menu(master)
         master.config(menu=menu)
 
-        # Podmenu
+        # Podmenu Igra
         menu_igra = Menu(menu, tearoff = 0)
         podmenu1 = Menu(menu, tearoff=0)
         podmenu2 = Menu(menu, tearoff=0)
@@ -60,33 +60,30 @@ class Gui():
         menu_igra.add_cascade(label="Računalnik(rdeči) : Človek(rumeni)", menu = podmenu2)
         menu_igra.add_cascade(label="Računalnik : Računalnik", menu = podmenu3)
 
-        #Podmenu: Težavnost
-        #Težavnost se nastavlja z izbiro algoritma, lazji je minimax , tezji
-        #pa minimax z alpha beta rezi in povecano globino
-
-        # Najlazja igra (računalnik se da zelo lahko premagati)
+        #Težavnost
+        # Najlažja igra (računalnik se da zelo lahko premagati)
         podmenu1.add_command(label='zelo lahko',
-                             command = lambda: self.zacni_igro(Clovek(self), Racunalnik(self, Minimax(globina - 4))))
+                             command = lambda: self.zacni_igro(Clovek(self), Racunalnik(self, Alfabeta(globina - 4))))
         podmenu2.add_command(label='zelo lahko',
-                             command = lambda: self.zacni_igro(Racunalnik(self, Minimax(globina - 4)), Clovek(self)))
+                             command = lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina - 4)), Clovek(self)))
         podmenu3.add_command(label='zelo lahko',
-                             command = lambda: self.zacni_igro(Racunalnik(self, Minimax(globina - 4)), Racunalnik(self, Minimax(globina - 4))))
+                             command = lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina - 4)), Racunalnik(self, Alfabeta(globina - 4))))
 
         # Lahka igra (računalnik se da precej lahko premagati)
         podmenu1.add_command(label='lahko',
-                             command=lambda: self.zacni_igro(Clovek(self), Racunalnik(self, Minimax(globina - 3))))
+                             command=lambda: self.zacni_igro(Clovek(self), Racunalnik(self, Alfabeta(globina - 3))))
         podmenu2.add_command(label='lahko',
-                             command=lambda: self.zacni_igro(Racunalnik(self, Minimax(globina - 3)), Clovek(self)))
+                             command=lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina - 3)), Clovek(self)))
         podmenu3.add_command(label='lahko',
-                             command=lambda: self.zacni_igro(Racunalnik(self, Minimax(globina - 3)), Racunalnik(self, Minimax(globina - 3))))
+                             command=lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina - 3)), Racunalnik(self, Alfabeta(globina - 3))))
 
         # Srednje težka igra (za zmago se je potrebno malo potruditi)
         podmenu1.add_command(label='srednje',
-                             command=lambda: self.zacni_igro(Clovek(self), Racunalnik(self, Minimax(globina - 2))))
+                             command=lambda: self.zacni_igro(Clovek(self), Racunalnik(self, Alfabeta(globina - 2))))
         podmenu2.add_command(label='srednje',
-                             command=lambda: self.zacni_igro(Racunalnik(self, Minimax(globina - 2)), Clovek(self)))
+                             command=lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina - 2)), Clovek(self)))
         podmenu3.add_command(label='srednje',
-                             command=lambda: self.zacni_igro(Racunalnik(self, Minimax(globina - 2)), Racunalnik(self, Minimax(globina - 2))))
+                             command=lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina - 2)), Racunalnik(self, Alfabeta(globina - 2))))
 
         # Težka igra (za zmago se je potrebno zelo potruditi)
         podmenu1.add_command(label='težko',
@@ -104,10 +101,28 @@ class Gui():
         podmenu3.add_command(label='zelo težko',
                              command=lambda: self.zacni_igro(Racunalnik(self, Alfabeta(globina)), Racunalnik(self, Alfabeta(globina))))
 
+        #Podmenu pomoč
+        menu_pomoc = Menu(menu, tearoff=False)
+        menu.add_cascade(label='Pomoč', menu=menu_pomoc)
+        menu_pomoc.add_command(label='Navodila', command = lambda: self.navodila())
+
+
+
         # Z zamikom začne igro človek(rdeči) proti računalniku(rumeni)
         self.plosca.after(1000,
                           lambda:
                           self.zacni_igro(Clovek(self), Racunalnik(self, Alfabeta(globina))))
+
+    def navodila(self):
+        '''Odpre novo okno, v katerem se izpišejo pravila igre štiri v vrsto.'''
+        navodila = """1. Igro začne igralec z rdečimi žetoni
+        2. Vsak igralec vstavi po en žeton v katerikoli stolpec
+        (žeton zasede najnižje mesto v danem stolpcu)
+        3. Igra se izmenično, dokler eden od igralcev ne postavi
+        štiri žetone v zaporedna polja
+        4. Zmaga tisti, ki uspe prvi postaviti štiri žetone v
+        zaporedna polja"""
+        Label(Toplevel(root), text=navodila, font=8).pack()
 
     def zacni_igro(self, rdeci_igralec, rumeni_igralec):
         '''Stanje igre nastavi na začetek.'''
