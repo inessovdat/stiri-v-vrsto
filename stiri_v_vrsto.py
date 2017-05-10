@@ -106,8 +106,6 @@ class Gui():
         menu.add_cascade(label='Pomoč', menu=menu_pomoc)
         menu_pomoc.add_command(label='Navodila', command = lambda: self.navodila())
 
-
-
         # Z zamikom začne igro človek(rdeči) proti računalniku(rumeni)
         self.plosca.after(1000,
                           lambda:
@@ -115,14 +113,14 @@ class Gui():
 
     def navodila(self):
         '''Odpre novo okno, v katerem se izpišejo pravila igre štiri v vrsto.'''
-        navodila = """1. Igro začne igralec z rdečimi žetoni
-        2. Vsak igralec vstavi po en žeton v katerikoli stolpec
-        (žeton zasede najnižje mesto v danem stolpcu)
+        navodila = """1. Igro začne igralec z rdeči igralec
+        2. Vsak igralec vstavi po en krogec v katerikoli stolpec
+        (krogec zasede najnižje prazno mesto v danem stolpcu)
         3. Igra se izmenično, dokler eden od igralcev ne postavi
-        štiri žetone v zaporedna polja
-        4. Zmaga tisti, ki uspe prvi postaviti štiri žetone v
+        štiri krogce v zaporedna polja
+        4. Zmaga tisti, ki uspe prvi postaviti štiri krogce v
         zaporedna polja"""
-        Label(Toplevel(root), text=navodila, font=8).pack()
+        Label(Toplevel(root),bg='deep sky blue', text=navodila, font=8).pack()
 
     def zacni_igro(self, rdeci_igralec, rumeni_igralec):
         '''Stanje igre nastavi na začetek.'''
@@ -163,7 +161,6 @@ class Gui():
         if self.rdeci_igralec: self.rdeci_igralec.prekini()
         if self.rumeni_igralec: self.rumeni_igralec.prekini()
 
-
     def zapri_okno(self, master):
         '''Ko uporabnik zapre aplikacijo, ta metoda zapre okno.'''
         self.prekini_igralce()
@@ -194,7 +191,7 @@ class Gui():
         if self.animacija_trenutna_vrstica < vrstica:
             self.plosca.coords(self.animacija_id, koordinate_krogca(self.animacija_trenutna_vrstica, stolpec))
             self.animacija_trenutna_vrstica += 1
-            self.animacija_alarm = self.plosca.after(150,self.animiraj_krogec)
+            self.animacija_alarm = self.plosca.after(150, self.animiraj_krogec)
 
         # Konča animacijo krogca
         else:

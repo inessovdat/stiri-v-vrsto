@@ -44,14 +44,14 @@ class Minimax:
     ZMAGA = 10000000
     NESKONCNO = ZMAGA + 1 # Več kot zmaga
 
-    def stej(self):
-        stevilo_krogcev = 0
+    def prestej_krogce(self):
+        ''' Prešteje število krogcev na igralni plošči.'''
+        krogci = 0
         for i in range(6):
             for j in range(5):
                 if self.igra.plosca[i][j] != PRAZNO:
-                    stevilo_krogcev += 1
-        return stevilo_krogcev
-                
+                    krogci += 1
+        return krogci
 
     def vrednost_pozicije(self):
         """Ocena vrednosti pozicije: sešteje vrednosti vseh štirk na plošči."""
@@ -60,14 +60,14 @@ class Minimax:
         # potem je taka štirka za self.jaz vredna v.
         # Štirke, ki se ne pojavljajo v slovarju, so vredne 0.
         vrednost_stirke = {
-            (4,0) : Minimax.ZMAGA - 10*self.stej(),
-            (0,4) : -Minimax.ZMAGA + 10*self.stej(),
-            (3,0) : Minimax.ZMAGA//100 - 10*self.stej(),
-            (0,3) : -Minimax.ZMAGA//100 + 10*self.stej(),
-            (2,0) : Minimax.ZMAGA//10000 - 10*self.stej(),
-            (0,2) : -Minimax.ZMAGA//10000 + 10*self.stej(),
-            (1,0) : Minimax.ZMAGA//1000000 - 10*self.stej(),
-            (0,1) : -Minimax.ZMAGA//1000000 + 10*self.stej()
+            (4,0) : Minimax.ZMAGA - 10*self.prestej_krogce(),
+            (0,4) : -Minimax.ZMAGA + 10*self.prestej_krogce(),
+            (3,0) : Minimax.ZMAGA//100 - 10*self.prestej_krogce(),
+            (0,3) : -Minimax.ZMAGA//100 + 10*self.prestej_krogce(),
+            (2,0) : Minimax.ZMAGA//10000 - 10*self.prestej_krogce(),
+            (0,2) : -Minimax.ZMAGA//10000 + 10*self.prestej_krogce(),
+            (1,0) : Minimax.ZMAGA//1000000 - 10*self.prestej_krogce(),
+            (0,1) : -Minimax.ZMAGA//1000000 + 10*self.prestej_krogce()
         }
         vrednost = 0
         for p in self.igra.stirke:
